@@ -23,7 +23,7 @@ stages:
     - script: |
         java -version
         mvn -version
-        cd JavaLoginShowcase
+        cd JavaLoginPracticeApp
         mvn clean package -DskipTests
         displayName: Build WAR with Maven
 
