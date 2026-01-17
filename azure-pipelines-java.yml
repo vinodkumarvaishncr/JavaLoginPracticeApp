@@ -12,28 +12,26 @@ stages:
 # CI STAGE – BUILD
 # =========================
 - stage: Build
-  displayName: Build WAR
   jobs:
-  - job: MavenBuild
-
-
+  - job: BuildWAR
+    pool:
+      name: agent1_pool
     steps:
     - checkout: self
 
     - script: |
-        java -version
-        mvn -version
-        cd JavaLoginPracticeApp
+        echo "Current dir:"
+        dir
+        mvn help:evaluate -Dexpression=project.packaging -q -DforceStdout
         mvn clean package -DskipTests
-        displayName: Build WAR with Maven
+      displayName: Maven Build
 
     - script: |
+        echo "Searching for WAR..."
         dir /s *.war
-      displayName: Verify WAR exists
+      displayName: Find WAR
 
     - task: PublishBuildArtifacts@1
-      displayName: Publish WAR Artifact
       inputs:
         PathtoPublish: '**/*.war'
         ArtifactName: drop
-        
