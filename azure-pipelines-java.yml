@@ -27,10 +27,13 @@ stages:
         mvn clean package -DskipTests
         displayName: Build WAR with Maven
 
+    - script: |
+        dir /s *.war
+      displayName: Verify WAR exists
 
     - task: PublishBuildArtifacts@1
       displayName: Publish WAR Artifact
       inputs:
-        PathtoPublish: JavaLoginShowcase/target
+        PathtoPublish: '**/*.war'
         ArtifactName: drop
         
