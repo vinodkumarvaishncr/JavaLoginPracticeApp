@@ -23,6 +23,7 @@ stages:
     - script: |
         java -version
         mvn -version
+        cd JavaLoginShowcase
         mvn clean package -DskipTests
         displayName: Build WAR with Maven
 
@@ -30,6 +31,6 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: Publish WAR Artifact
       inputs:
-        PathtoPublish: target
+        PathtoPublish: JavaLoginShowcase/target
         ArtifactName: drop
-        publishLocation: Container
+        
