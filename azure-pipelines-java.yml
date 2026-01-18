@@ -27,6 +27,11 @@ stages:
       displayName: Maven Build
 
     - script: |
+        echo "Maven target directory:"
+        dir target
+        displayName: Check target folder
+
+    - script: |
         echo "Searching for WAR..."
         dir /s *.war
       displayName: Find WAR
