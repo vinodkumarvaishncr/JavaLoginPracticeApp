@@ -38,3 +38,42 @@ stages:
         PathtoPublish: '$(System.DefaultWorkingDirectory)/target'
         ArtifactName: 'drop'
         publishLocation: 'Container'
+
+
+# =========================
+# CD STAGE – DEPLOY TO TOMCAT
+# =========================
+- stage: CDD
+  displayName: "Deploy to Dev"
+  dependsOn: Build
+  jobs:
+  - job: DeployWAR
+    displayName: "Deploy WAR to Tomcat"
+    steps:
+
+    - task: DownloadPipelineArtifact@2
+      displayName: "Download Build Artifact"
+      inputs:
+        buildType: 'current'
+        artifactName: 'drop'
+        targetPath: '$(System.DefaultWorkingDirectory)/target'
+
+    - task: CopyFilesOverSSH@0
+      displayName: "Copy WAR to Linux Server"
+      inputs:
+        sshEndpoint: 'ssh_ado'
+        sourceFolder: '$(System.DefaultWorkingDirectory)/target'
+        contents: '*.war'
+        targetFolder: '/home/vinodadmin'
+        cleanTargetFolder: true
+        readyTimeout: '20000'
+
+    - task: SSH@0
+      displayName: "Deploy WAR to Tomcat"
+      inputs:
+        sshEndpoint: 'ssh_ado'
+        runOptions: 'commands'
+        commands: |
+          sudo cp /home/vinodadmin/*.war /var/lib/tomcat10/webapps/
+          sudo systemctl restart tomcat10
+        readyTimeout: '20000'
