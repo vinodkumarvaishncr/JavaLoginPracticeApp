@@ -21,17 +21,17 @@ stages:
         echo "Current dir:"
         dir
         mvn clean package -DskipTests
-      displayName: Maven Build
+      displayName: "Maven Build"
 
     - script: |
         echo "Maven target directory:"
         dir target
-        displayName: Check target folder
+        displayName: "Check target folder"
 
     - script: |
         echo "Searching for WAR..."
         dir /s *.war || echo "WAR not found"
-        displayName: Find WAR
+        displayName: "Find WAR"
 
     - task: PublishBuildArtifacts@1
       inputs:
